@@ -17,12 +17,13 @@ session = requests.session()
 
 st_flpv = contextJs.call('uuid')
 token = contextJs.call('uuid', 32)
-sign = '4cd41c83419775df071de50129463af6' # 用户个人签名
-userId = '3577537' # 用户个人id
-idToken = '05c51fcf4d64b59c65e054265c8f161d' # 用户idtoken 会经常刷新
-activityId = '219708' # 演出ID
-ticketId = '5d9db77f5b470a4776cfb226f18566d2' # 具体化某一场演出的id
-commonPerfomerIds = [1018110] # 需要绑定的观演人
+sign = '05e8de5489be526b6bb89a7a4ecad55b' # '4cd41c83419775df071de50129463af6' # 用户个人签名
+userId = '3577537' # 用户个人id 3577537
+idToken = '09a969cb97128c5065e563771bf1baba' # 用户idtoken 会经常刷新
+activityId = '221370' # 演出ID
+ticketId = 'c8a6c9f076ac968b6178743cadd17c67' # 具体化某一场演出的id
+ticketNum = 2
+commonPerfomerIds = [] # 需要绑定的观演人 1018110
 comHeaderParams = {
     "st_flpv": st_flpv,
     "sign": sign,
@@ -133,7 +134,7 @@ def getActivityTicket():
         "url": "/wap/activity/V2/ticket/list",
         "accessToken": tokenData['accessToken']
     }, requestData)
-    print(HEADERS)
+    # print(HEADERS)
     url = "https://wap.showstart.com/v3/wap/activity/V2/ticket/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
@@ -142,7 +143,7 @@ def getActivityTicket():
     # 返回的saleStatus 为 1 可购买
     return response.json()
 
-# getActivityTicket()
+getActivityTicket()
 
 # 获取观演人列表
 def cpList():
@@ -174,7 +175,7 @@ def orderConfirm():
     requestData = {
         "sequence": activityId,
         "ticketId": ticketId,
-        "ticketNum": '1',
+        "ticketNum": ticketNum,
         "sign": sign,
         "st_flpv": st_flpv,
         "trackPath": '',
@@ -207,7 +208,7 @@ def createOrder(orderInfoVo):
         'orderDetails': [{
             'goodsType': 1,
             'skuType': orderInfoVo['ticketPriceVo']['ticketType'],
-            'num': orderInfoVo['ticketPriceVo']['transformNum'],
+            'num': ticketNum, # orderInfoVo['ticketPriceVo']['transformNum'],
             'goodsId': orderInfoVo['activityId'],
             'skuId': orderInfoVo['ticketPriceVo']['ticketId'],
             'price': orderInfoVo['ticketPriceVo']['price'],
@@ -227,8 +228,8 @@ def createOrder(orderInfoVo):
         'discount': 0,  # 折扣价格
         'sessionId': orderInfoVo['sessionId'],
         'freight': 0, # orderInfoVo['freight'],
-        'amountPayable': orderInfoVo['ticketPriceVo']['price'],
-        'totalAmount': orderInfoVo['ticketPriceVo']['price'],
+        'amountPayable': orderInfoVo['ticketPriceVo']['price'] * ticketNum,
+        'totalAmount': orderInfoVo['ticketPriceVo']['price'] * ticketNum,
         'partner': '',
         'orderSource': 1,
         'videoId': '',
@@ -256,10 +257,12 @@ def createOrder(orderInfoVo):
     return response.json()
 
 
-for i in range(5):
+for i in range(2):
+    # timestamp = time.time()
+    # current_time = time.ctime(timestamp)
+    # print(current_time)
     orderConfirm()
-    print(i)
-    time.sleep(0.1)
+    time.sleep(0.2)
 
 
 # 下单订单查询
