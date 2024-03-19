@@ -5,6 +5,7 @@ import json
 import execjs
 from urllib.parse import quote
 import time
+import datetime
 
 def js_from_file(file_name):
     with open(file_name, 'r', encoding='UTF-8') as file:
@@ -19,11 +20,11 @@ st_flpv = contextJs.call('uuid')
 token = contextJs.call('uuid', 32)
 sign = '05e8de5489be526b6bb89a7a4ecad55b' # '4cd41c83419775df071de50129463af6' # 用户个人签名
 userId = '3577537' # 用户个人id 3577537
-idToken = '09a969cb97128c5065e563771bf1baba' # 用户idtoken 会经常刷新
-activityId = '221370' # 演出ID
-ticketId = 'c8a6c9f076ac968b6178743cadd17c67' # 具体化某一场演出的id
-ticketNum = 2
-commonPerfomerIds = [] # 需要绑定的观演人 1018110
+idToken = '15ec2ddf7d60e20265f8064ca47ad493' # 用户idtoken 会经常刷新
+activityId = '222474' # 演出ID
+ticketId = '1c52a278c49fc0386f5f811f8dfd62c6' # 具体化某一场演出的id
+ticketNum = 1
+commonPerfomerIds = [1018110] # 需要绑定的观演人 1018110
 comHeaderParams = {
     "st_flpv": st_flpv,
     "sign": sign,
@@ -46,12 +47,12 @@ def getToken(sign = ''):
         'timeUuid': contextJs.call('timeUuid', 32),
         **comHeaderParams,
     }, requestData)
-    print(HEADERS)
+    # print(HEADERS)
     url = "https://wap.showstart.com/v3/waf/gettoken"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
-    # print(response.json())
+    print(response.json())
     return {
         "accessToken": response.json()['result']['accessToken']['access_token'], 
         "idToken": response.json()['result']['idToken']['id_token']
@@ -82,7 +83,7 @@ def getList():
         "url": "/wap/activity/list",
         "accessToken": tokenData['accessToken']
     }, requestData)
-    print(HEADERS)
+    # print(HEADERS)
     url = "https://wap.showstart.com/v3/wap/activity/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
@@ -90,7 +91,7 @@ def getList():
     print(response.json())
     return response.json()
 
-# getList()
+getList()
 
 # 获取用户演出订单
 def getUserList():
@@ -143,7 +144,7 @@ def getActivityTicket():
     # 返回的saleStatus 为 1 可购买
     return response.json()
 
-getActivityTicket()
+# getActivityTicket()
 
 # 获取观演人列表
 def cpList():
@@ -257,12 +258,14 @@ def createOrder(orderInfoVo):
     return response.json()
 
 
-for i in range(2):
-    # timestamp = time.time()
-    # current_time = time.ctime(timestamp)
-    # print(current_time)
-    orderConfirm()
-    time.sleep(0.2)
+# for i in range(10):
+#     # now = datetime.datetime.now()
+#     # if now.hour == 11 and now.minute == 59:
+#     #     orderConfirm()
+#     # if now.hour == 12:
+#     #     orderConfirm()
+#     orderConfirm()
+#     time.sleep(0.2)
 
 
 # 下单订单查询

@@ -94,15 +94,16 @@ const getHeaders = function({
   const E = requestData ? JSON.stringify(requestData) : '' // n.data ? JSON.stringify(n.data) : ""
   const requestUrl = url//'/waf/gettoken' // n.url
   const v = CRTRACEID // uuid(32) + (new Date).getTime()
-  const f = 'wap'
-  const crpsing = a + t + i + s + "wap" + _ + E + requestUrl + "997" + f + v
+  const f = 'wap' // 'wap'
+  const version = '997'
+  const crpsing = a + t + i + s + f + _ + E + requestUrl + version + f + v
   return {
-      'CDEVICEINFO': Cdeviceinfo,
+      'CDEVICEINFO': '', // Cdeviceinfo,
       'CRPSIGN': md5(crpsing),
       'CRTRACEID': CRTRACEID,
-      'CSAPPID': "wap",
+      'CSAPPID': f,
       'CSOURCEPATH':"",
-      'CTERMINAL':"wap",
+      'CTERMINAL': f,
       'CTRACKPATH':"",
       'CUSAT': a || 'nil', // accessToken || 'nil'
       'CUSID': s || 'nil', // userId || "nil",
@@ -111,11 +112,8 @@ const getHeaders = function({
       'CUSUT': t || "nil", // sign || "nil",
       'CDEVICENO': _, // token || uuid(32).toLowerCase()
       'CUUSERREF': _, // token || uuid(32).toLowerCase()
-      'CVERSION': "997",
-      "Cookie": 'Hm_lvt_da038bae565bb601b53cc9cb25cdca74=1705560954;Hm_lpvt_da038bae565bb601b53cc9cb25cdca74=1705580259',
-      'Content-Type': "application/json;charset=UTF-8",
-      'St_flpv': st_flpv,
-      "User-Agent": "Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36"
+      'CVERSION': version,
+      'St_flpv': st_flpv
   }
 }
 
