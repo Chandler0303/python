@@ -1,12 +1,8 @@
-from dis import code_info
-from multiprocessing import context
-from pickle import TRUE
-from xmlrpc.client import Boolean
 import requests
 import json
 import execjs
-from urllib.parse import quote
 import time
+import datetime
 
 def js_from_file(file_name):
     with open(file_name, 'r', encoding='UTF-8') as file:
@@ -17,12 +13,19 @@ def js_from_file(file_name):
 contextJs = execjs.compile(js_from_file('./index.js'))
 session = requests.session()
 comHeaders = {
-    'Access-Token': 'eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJ6aXAiOiJERUYiLCJhbGciOiJSUzUxMiJ9.eNp8kEtPwzAQhP_LnnPwI340x6IikEBIFT1wQk68ViPFduU4CKj633GaQnviuKuZb3bnCNFMef8YXIQmTMNQwTRiWuYjtP33XbQIDdw_PL0_QwXj1K7_lpJJZTRBtIxqUTOlpaP1qi664tzGYRatd2-bbdn43O1mtJ2N3DGnOZGWS9USQijWWrmL8SoTXFvDmZMWzVlGrDakhVMF-HnoE772vmRQRcWKK8UpF-KMeDlgMjn-izElrUto8pVClOC_lPFrzOiXT5dmPKZub0K-bauccZtfwQemsY8BGrZUGYy_AE4_AAAA__8.huotUEDJqu_KYltlaf_ydTVUcrWRscpnMNlk6TAJs0XPIHY1oToBMt2qffdrUG784qFuqf8RZ7vZs8s2yipoJzqkmnVd4jatowKcJ2tS-2EcWENJidkNE3ziSPdaZsNFAqYAIgmeSrEbxi9lp7xV0NtwPqapwLlUm9CU9SP458s'
+    'Access-Token': 'eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJ6aXAiOiJERUYiLCJhbGciOiJSUzUxMiJ9.eNp8kMFOwzAQRP9lzznYseM4ORYVUakIqaIHTmgTr9VIcVw5DgKq_jtOU2hPHHc182Z3TuBxiofNYD3Uw9T3GUwjhWU-QdN9P3hDUMPj0_b9GTIYp2b1t1S5KlEzIpNzXci81MpyWcmkS86d72fRav-23qWNi-1-RpvZKGxutWDKCFU2jDFOUpf2arzJCqENitwqQ3iRMaORNXDOgD6PXaDXzqUMXnLFNeNaFFJcEC9HChj9vxhMaW0gjDcKqyr1Sxm_xkhu-XRpxlFoDzjE-7bSGff5GXxQGDs_QC2WKgd0V8D5BwAA__8.YnCjfYljrAAEZ-sQiWHmav_J5yA2hLTxiGlZLCscSNd2urtlFVftejpTH5MPHmlZxcE4rm7-nuSwFGr6VFSy190FNvahwVRuF8nvrcXSovIHsvXTf9gj_4Havuv1QGDmH7lCOGW25z6_0KBOuT_JTtDa8DJ4HecoLrYHpKndnNo'
 }
-showId = '65d83d1d19b6c7000161e2e9'
-plantIndex = 2
+showId = '65df5a2e29a7b900011e12de'#'65df5a2e29a7b900011e12de' 
+buyNum = 2
+sessionIndex = 2
 skuType = 'SINGLE' #'SINGLE_SKU'
-
+success = { 
+    'count': 0
+}
+# 定义一个特定的日期时间
+dt = datetime.datetime(2024, 3, 21, 12, 20, 00)  # 2024年3月21日12:20:00
+# 将日期时间转换为时间戳（以秒为单位）
+setTimestamp = int(dt.timestamp())
 
 
 # 获取演出详情数据
@@ -32,10 +35,11 @@ def getSessionsDetail():
     }
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/show/pub/v5/show/" + showId + "/sessions?src=WEB&ver=4.1.2-20240305183007&source=FROM_QUICK_ORDER&isQueryShowBasicInfo=true"
     response = requests.get(url, headers=HEADERS)
+    print(response.json())
     return response.json()['data']
 
 sessionsData = getSessionsDetail()
-sessionData = sessionsData[0]
+sessionData = sessionsData[sessionIndex]
 
 # 获取演出详情数据
 def getSessionDetail():
@@ -44,19 +48,45 @@ def getSessionDetail():
     }
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/show/pub/v5/show/" + showId + "/session/" + sessionData['bizShowSessionId'] + "/seat_plans?src=H5&ver=4.1.2-20240305183007&source=FROM_QUICK_ORDER"
     response = requests.get(url, headers=HEADERS)
+    print(response.json())
     return response.json()['data']['seatPlans']
 
 seatPlans = getSessionDetail()
 
 
 # 获取code
-def getCode():
+def getCode(plantIndex):
     HEADERS = {
         **comHeaders,
         "Content-Type": "application/json"
     }
-    generateId = str(int(time.time())) + '100000001'
-    id = str(int(time.time())) + '100000002'
+
+    ticketsData = []
+    operationsData = []
+    nums = 10000000
+
+    for i in range(buyNum):
+        nums2 = nums + 1
+        nums3 = nums2 + 1
+        nums = nums + 2
+        generateId = str(int(time.time())) + str(nums2)
+        id = str(int(time.time())) + str(nums3)
+        operationsData.append({
+            'id': id,
+            'snapshotId': '',
+            'ticketGenerateId': generateId
+        })
+        ticketsData.append({
+            'generateId': generateId,
+            'seatPlanId': seatPlans[plantIndex]['seatPlanId'],
+            'session': {
+                'bizShowSessionId': sessionData['bizShowSessionId']
+            },
+            'show': {
+                'showId': showId
+            }
+         })
+
     filters = []
     filters.append({
         'id': sessionData['showId'],
@@ -71,12 +101,15 @@ def getCode():
         'type': 'purchaseSessionLimiter'
     })
     for plans in seatPlans:
-      filters.append({
-        'id': plans['seatPlanId'],
-        'limitation': plans['canBuyCount'],
-        'limiterId': plans['seatPlanId'],
-        'type': 'purchaseSeatPlanLimiter'
-      })
+        plansData = {
+            'id': plans['seatPlanId'],
+            'limitation': plans['canBuyCount'],
+            'limiterId': plans['seatPlanId'],
+            'type': 'purchaseSeatPlanLimiter'
+        }
+        if (plans['seatPlanCategory'] == 'COMBO'):
+            plansData['type'] = 'fixedComboLimiter'
+        filters.append(plansData)
 
     data = {
         'bizCode': 'FHL_M',
@@ -107,22 +140,9 @@ def getCode():
                 'shoppingCart': {
                     'currentSnapshotId': '',
                     'isOpen': 'true',
-                    'operations': [{
-                        'id': id,
-                        'snapshotId': '',
-                        'ticketGenerateId': generateId
-                    }],
+                    'operations': operationsData,
                     'productSKUs': [],
-                    'tickets': [{
-                        'generateId': generateId,
-                        'seatPlanId': seatPlans[plantIndex]['seatPlanId'],
-                        'session': {
-                            'bizShowSessionId': sessionData['bizShowSessionId']
-                        },
-                        'show': {
-                            'showId': showId
-                        }
-                    }],
+                    'tickets': ticketsData,
                     '_combos': [],
                     '_seatPlans': [{
                         'originalPrice': seatPlans[plantIndex]['originalPrice'],
@@ -150,102 +170,108 @@ def getCode():
         'src': 'H5',
         'ver': '4.1.2-20240305183007',
     }
-    # print(data)
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/home/pub/v3/wxapps/short_codes/generate_code"
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
     # print(response.json())
+    wxaCode = response.json()['data']['wxaCode']
+    getShortCodesJSON(wxaCode)
     return response.json()['data']['wxaCode']
 
-wxaCode = getCode()
+# wxaCode = getCode()
 
 
 # 获取订单code对应json
-def getShortCodesJSON():
+def getShortCodesJSON(wxaCode):
     HEADERS = {
         **comHeaders,
         "Content-Type": "application/json"
     }
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/home/pub/v3/wxapps/short_codes/code/" + wxaCode + "?src=H5&ver=4.1.2-20240305183007"
     response = requests.get(url, headers=HEADERS)
+    getBuyerOrder(json.loads(response.json()['data']['param']))
     return response.json()['data']['param']
 
-orderJSON = json.loads(getShortCodesJSON())
-
-
-
-
-
-
-
+# orderJSON = json.loads(getShortCodesJSON())
 
 
 # 确认订单获取用户身份信息
-def getBuyerOrder():
-    print(orderJSON['saleAssistantJson']['shoppingCart'])
+def getBuyerOrder(orderJSON):
+    # print(orderJSON['saleAssistantJson']['shoppingCart'])
     shoppingCart = orderJSON['saleAssistantJson']['shoppingCart']
     HEADERS = {
         "Content-Type": "application/json",
         **comHeaders,
     }
-    items = []
+    ticketItems = []
+    ticketIndex = 0
     for ticket in shoppingCart['tickets']:
-      items.append({
+      ticketItems.append({
+          'id': ticket['generateId']
+      })
+      ticketIndex = ticketIndex + 1
+
+    items = [{
         'sku': {
-            'qty': 1,
+            'qty': buyNum,
             'skuType': skuType,
             'ticketPrice': shoppingCart['_seatPlans'][0]['originalPrice'],
             'skuId': ticket['seatPlanId'],
-            'ticketItems': [{
-                'id': ticket['generateId']
-            }],
+            'ticketItems': ticketItems,
         },
         'spu': {
             'sessionId': ticket['session']['bizShowSessionId'],
             'showId': ticket['show']['showId']
         }
-    }) 
+    }] 
     data = {
         'priorityId': '',
         'items': items,
         'src': 'H5',
         'ver': '4.1.2-20240305183007'
     }
+    
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/trade/buyer/order/v5/pre_order"
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
     print(response.json())
-    return response.json()['data']
+    if "data" in response.json() and response.json()["data"]:
+        createOrder(orderJSON, response.json()['data'])
+        return response.json()['data']
 
-orderData = getBuyerOrder()
+# orderData = getBuyerOrder()
 
 # 创建订单
-def createOrder():
+def createOrder(orderJSON, orderData):
     shoppingCart = orderJSON['saleAssistantJson']['shoppingCart']
     HEADERS = {
         "Content-Type": "application/json",
         **comHeaders,
     }
     totalAmount = 0
-    items = []
+    ticketItems = []
+    ticketIndex = 0
     for ticket in shoppingCart['tickets']:
-      items.append({
+      ticketItems.append({
+        'id': ticket['generateId'],
+        "audienceId": orderData['audiences'][ticketIndex]['id']
+      })
+      ticketIndex = ticketIndex + 1
+
+    items = [{
         'sku': {
-            'qty': 1,
+            'qty': buyNum,
             'skuType': skuType,
             'ticketPrice': shoppingCart['_seatPlans'][0]['originalPrice'],
             'skuId': ticket['seatPlanId'],
-            'ticketItems': [{
-                'id': ticket['generateId'],
-                "audienceId": orderData['audiences'][0]['id']
-            }],
+            'ticketItems': ticketItems,
         },
         'spu': {
             'sessionId': ticket['session']['bizShowSessionId'],
             'showId': ticket['show']['showId']
         },
         "deliverMethod": orderData['supportDeliveries'][0]['name']
-    })
+    }]
     priceItems = []
     for priceItem in orderData['priceItems']:
         totalAmount += priceItem['priceItemVal']
@@ -256,7 +282,7 @@ def createOrder():
             "priceItemType": priceItem['priceItemType'],
             "priceItemSpecies": priceItem['priceItemSpecies'],
             "direction": priceItem['direction'],
-            "priceDisplay": '￥' + priceItem['priceItemName'],
+            "priceDisplay": '￥' + str(priceItem['priceItemVal']),
         })
     data = {
         "src": "H5",
@@ -274,11 +300,37 @@ def createOrder():
         "priorityId": "",
         "many2OneAudience": {}
     }
+    print(data)
     url = "https://m.piaoxingqiu.com/cyy_gatewayapi/trade/buyer/order/v5/create_order"
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
     print(response.json())
-    return response.json()['data']
+    # createOrder(orderJSON, orderData)
+    if "data" in response.json() and response.json()['data']['orderId']:
+        stop()
+        return response.json()['data']
 
-createOrder()
+# createOrder()
+def stop():
+    success['count'] = 100
+
+while success['count'] < 1:
+    getCode(3)
+    print(setTimestamp)
+    nowTime = datetime.datetime.now().timestamp()
+    print(nowTime)
+    print(seatPlans[3])
+    print(seatPlans[4])
+    if (nowTime == setTimestamp or nowTime > setTimestamp):
+        if (seatPlans[3]['canBuyCount'] > 0):
+                getCode(3)
+        if (seatPlans[4]['canBuyCount'] > 0):
+                getCode(4)
+
+    time.sleep(0.1)
+    break
+    print(success['count'])
+    if (success['count'] > 1):
+        break
+
 

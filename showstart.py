@@ -1,9 +1,6 @@
-from dis import code_info
-from multiprocessing import context
 import requests
 import json
 import execjs
-from urllib.parse import quote
 import time
 import datetime
 
@@ -12,17 +9,18 @@ def js_from_file(file_name):
         result = file.read()
     return result
 
+
     
 contextJs = execjs.compile(js_from_file('./index.js'))
 session = requests.session()
 
 st_flpv = contextJs.call('uuid')
 token = contextJs.call('uuid', 32)
-sign = '05e8de5489be526b6bb89a7a4ecad55b' # '4cd41c83419775df071de50129463af6' # 用户个人签名
+sign = 'c708fd146b352db329e48e7c30e7d54f' # '4cd41c83419775df071de50129463af6' # 用户个人签名
 userId = '3577537' # 用户个人id 3577537
-idToken = '15ec2ddf7d60e20265f8064ca47ad493' # 用户idtoken 会经常刷新
-activityId = '222474' # 演出ID
-ticketId = '1c52a278c49fc0386f5f811f8dfd62c6' # 具体化某一场演出的id
+idToken = '82b6ab253619126565fbc4fc19f46afe' # 用户idtoken 会经常刷新
+activityId = '223309' # 演出ID
+ticketId = '92b937e67bb96c057609d8fcdfe949ee' # 具体化某一场演出的id
 ticketNum = 1
 commonPerfomerIds = [1018110] # 需要绑定的观演人 1018110
 comHeaderParams = {
@@ -52,7 +50,7 @@ def getToken(sign = ''):
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
-    print(response.json())
+    #print(response.json())
     return {
         "accessToken": response.json()['result']['accessToken']['access_token'], 
         "idToken": response.json()['result']['idToken']['id_token']
@@ -91,7 +89,7 @@ def getList():
     print(response.json())
     return response.json()
 
-getList()
+#getList()
 
 # 获取用户演出订单
 def getUserList():
@@ -144,7 +142,7 @@ def getActivityTicket():
     # 返回的saleStatus 为 1 可购买
     return response.json()
 
-# getActivityTicket()
+getActivityTicket()
 
 # 获取观演人列表
 def cpList():
@@ -258,14 +256,14 @@ def createOrder(orderInfoVo):
     return response.json()
 
 
-# for i in range(10):
-#     # now = datetime.datetime.now()
-#     # if now.hour == 11 and now.minute == 59:
-#     #     orderConfirm()
-#     # if now.hour == 12:
-#     #     orderConfirm()
-#     orderConfirm()
-#     time.sleep(0.2)
+for i in range(100000):
+     # now = datetime.datetime.now()
+     # if now.hour == 11 and now.minute == 59:
+     #     orderConfirm()
+     # if now.hour == 12:
+     #     orderConfirm()
+     orderConfirm()
+     time.sleep(0.1)
 
 
 # 下单订单查询

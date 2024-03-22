@@ -1,9 +1,6 @@
-from dis import code_info
-from multiprocessing import context
 import requests
 import json
 import execjs
-from urllib.parse import quote
 import time
 
 def js_from_file(file_name):

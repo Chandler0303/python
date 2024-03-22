@@ -47,7 +47,7 @@ const setKey = function(headers = {}){
     p
   }
 }
-
+// 秀动加密
 const encrypt = function(word, key) {
   key = key || '0RGF99CtUajPF0Ny';
   word = JSON.stringify(word)
