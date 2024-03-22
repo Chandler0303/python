@@ -15,9 +15,9 @@ session = requests.session()
 comHeaders = {
     'Access-Token': 'eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJ6aXAiOiJERUYiLCJhbGciOiJSUzUxMiJ9.eNp8kMFOwzAQRP9lzznYseM4ORYVUakIqaIHTmgTr9VIcVw5DgKq_jtOU2hPHHc182Z3TuBxiofNYD3Uw9T3GUwjhWU-QdN9P3hDUMPj0_b9GTIYp2b1t1S5KlEzIpNzXci81MpyWcmkS86d72fRav-23qWNi-1-RpvZKGxutWDKCFU2jDFOUpf2arzJCqENitwqQ3iRMaORNXDOgD6PXaDXzqUMXnLFNeNaFFJcEC9HChj9vxhMaW0gjDcKqyr1Sxm_xkhu-XRpxlFoDzjE-7bSGff5GXxQGDs_QC2WKgd0V8D5BwAA__8.YnCjfYljrAAEZ-sQiWHmav_J5yA2hLTxiGlZLCscSNd2urtlFVftejpTH5MPHmlZxcE4rm7-nuSwFGr6VFSy190FNvahwVRuF8nvrcXSovIHsvXTf9gj_4Havuv1QGDmH7lCOGW25z6_0KBOuT_JTtDa8DJ4HecoLrYHpKndnNo'
 }
-showId = '65df5a2e29a7b900011e12de'#'65df5a2e29a7b900011e12de' 
-buyNum = 2
-sessionIndex = 2
+showId = '65bb0152c0b1840001cb9ae2' 
+buyNum = 1
+sessionIndex = 0
 skuType = 'SINGLE' #'SINGLE_SKU'
 success = { 
     'count': 0
@@ -305,32 +305,30 @@ def createOrder(orderJSON, orderData):
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
     print(response.json())
-    # createOrder(orderJSON, orderData)
     if "data" in response.json() and response.json()['data']['orderId']:
-        stop()
         return response.json()['data']
+    else:
+        createOrder(orderJSON, orderData)
 
 # createOrder()
-def stop():
-    success['count'] = 100
 
 while success['count'] < 1:
-    getCode(3)
-    print(setTimestamp)
-    nowTime = datetime.datetime.now().timestamp()
-    print(nowTime)
-    print(seatPlans[3])
-    print(seatPlans[4])
-    if (nowTime == setTimestamp or nowTime > setTimestamp):
-        if (seatPlans[3]['canBuyCount'] > 0):
-                getCode(3)
-        if (seatPlans[4]['canBuyCount'] > 0):
-                getCode(4)
+    getCode(1)
+    # print(setTimestamp)
+    # nowTime = datetime.datetime.now().timestamp()
+    # print(nowTime)
+    # print(seatPlans[3])
+    # print(seatPlans[4])
+    # if (nowTime == setTimestamp or nowTime > setTimestamp):
+    #     if (seatPlans[3]['canBuyCount'] > 0):
+    #             getCode(3)
+    #     if (seatPlans[4]['canBuyCount'] > 0):
+    #             getCode(4)
 
     time.sleep(0.1)
     break
-    print(success['count'])
-    if (success['count'] > 1):
-        break
+    # print(success['count'])
+    # if (success['count'] > 1):
+    #     break
 
 
