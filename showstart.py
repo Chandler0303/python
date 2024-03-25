@@ -1,3 +1,4 @@
+from itertools import count
 import requests
 import json
 import execjs
@@ -13,16 +14,16 @@ def js_from_file(file_name):
     
 contextJs = execjs.compile(js_from_file('./index.js'))
 session = requests.session()
-
+count = 0
 st_flpv = contextJs.call('uuid')
 token = contextJs.call('uuid', 32)
-sign = 'c708fd146b352db329e48e7c30e7d54f' # '4cd41c83419775df071de50129463af6' # 用户个人签名
+sign = '7a4fe6f2485df7c95111d54a959602aa' # 用户个人签名
 userId = '3577537' # 用户个人id 3577537
-idToken = '82b6ab253619126565fbc4fc19f46afe' # 用户idtoken 会经常刷新
-activityId = '223309' # 演出ID
-ticketId = '92b937e67bb96c057609d8fcdfe949ee' # 具体化某一场演出的id
+idToken = '1d12b56c83bec774660118f4188028b3' # 用户idtoken 会经常刷新
+activityId = '223394' # 演出ID
+ticketId = 'f5cf1fa27fef50e7f511139cd7d47013' # 具体化某一场演出的id
 ticketNum = 1
-commonPerfomerIds = [1018110] # 需要绑定的观演人 1018110
+commonPerfomerIds = [] # 需要绑定的观演人 1018110
 comHeaderParams = {
     "st_flpv": st_flpv,
     "sign": sign,
@@ -45,12 +46,12 @@ def getToken(sign = ''):
         'timeUuid': contextJs.call('timeUuid', 32),
         **comHeaderParams,
     }, requestData)
-    # print(HEADERS)
+    print(HEADERS)
     url = "https://wap.showstart.com/v3/waf/gettoken"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
-    #print(response.json())
+    print(response.json())
     return {
         "accessToken": response.json()['result']['accessToken']['access_token'], 
         "idToken": response.json()['result']['idToken']['id_token']
@@ -89,7 +90,7 @@ def getList():
     print(response.json())
     return response.json()
 
-#getList()
+# getList()
 
 # 获取用户演出订单
 def getUserList():
@@ -159,7 +160,6 @@ def cpList():
         "url": "/wap/cp/list",
         "accessToken": tokenData['accessToken']
     }, requestData)
-    print(HEADERS)
     url = "https://wap.showstart.com/v3/wap/cp/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
@@ -167,7 +167,7 @@ def cpList():
     print(response.json())
     return response.json()
 
-# cpList()
+cpList()
 
 # 确定订单
 def orderConfirm():
@@ -253,17 +253,23 @@ def createOrder(orderInfoVo):
     data = json.dumps(requestData, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
     print(response.json())
+    if response.json()['state'] == '1':
+        count = 100
+    else:
+        createOrder(orderInfoVo)
     return response.json()
 
 
-for i in range(100000):
+for i in range(1):
      # now = datetime.datetime.now()
      # if now.hour == 11 and now.minute == 59:
      #     orderConfirm()
      # if now.hour == 12:
      #     orderConfirm()
-     orderConfirm()
-     time.sleep(0.1)
+    orderConfirm()
+    time.sleep(0.3)
+    if count > 0:
+        break
 
 
 # 下单订单查询
