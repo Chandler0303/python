@@ -6,7 +6,7 @@
 // Rohr_Opt.LogVal = "rohrdata"
 
 const rohr = require('./rohr.min')
-rohr()
+// rohr()
 function gen_token(url){
   return Rohr_Opt.reload(url);
 }
