@@ -15,15 +15,16 @@ def js_from_file(file_name):
 contextJs = execjs.compile(js_from_file('./index.js'))
 session = requests.session()
 count = 0
+requestUrl = 'https://wap.showstart.com/v3' # https://wap.showstart.com/v3 (h5) https://api3.showstart.com（miniweix）
 st_flpv = contextJs.call('uuid')
 token = contextJs.call('uuid', 32)
 sign = '7a4fe6f2485df7c95111d54a959602aa' # 用户个人签名
 userId = '3577537' # 用户个人id 3577537
-idToken = '1d12b56c83bec774660118f4188028b3' # 用户idtoken 会经常刷新
-activityId = '223394' # 演出ID
-ticketId = 'f5cf1fa27fef50e7f511139cd7d47013' # 具体化某一场演出的id
+idToken = '56aae441ee5bb97d6612140cf9bcb818' # 用户idtoken 会经常刷新
+activityId = '224035' # 演出ID
+ticketId = '4d5015f529654b29a1cbe439e33ff692' # 具体化某一场演出的id
 ticketNum = 1
-commonPerfomerIds = [] # 需要绑定的观演人 1018110
+commonPerfomerIds = [22813295] # 需要绑定的观演人 1018110
 comHeaderParams = {
     "st_flpv": st_flpv,
     "sign": sign,
@@ -47,7 +48,7 @@ def getToken(sign = ''):
         **comHeaderParams,
     }, requestData)
     print(HEADERS)
-    url = "https://wap.showstart.com/v3/waf/gettoken"
+    url = requestUrl + "/waf/gettoken"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
@@ -83,7 +84,7 @@ def getList():
         "accessToken": tokenData['accessToken']
     }, requestData)
     # print(HEADERS)
-    url = "https://wap.showstart.com/v3/wap/activity/list"
+    url = requestUrl + "/wap/activity/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
@@ -109,7 +110,7 @@ def getUserList():
         "accessToken": tokenData['accessToken']
     }, requestData)
     print(HEADERS)
-    url = "https://wap.showstart.com/v3/order/wap/order/list"
+    url = requestUrl + "/order/wap/order/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
@@ -135,7 +136,7 @@ def getActivityTicket():
         "accessToken": tokenData['accessToken']
     }, requestData)
     # print(HEADERS)
-    url = "https://wap.showstart.com/v3/wap/activity/V2/ticket/list"
+    url = requestUrl + "/wap/activity/V2/ticket/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
@@ -160,7 +161,7 @@ def cpList():
         "url": "/wap/cp/list",
         "accessToken": tokenData['accessToken']
     }, requestData)
-    url = "https://wap.showstart.com/v3/wap/cp/list"
+    url = requestUrl + "/wap/cp/list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
@@ -187,7 +188,7 @@ def orderConfirm():
         "url": "/order/wap/order/confirm",
         "accessToken": tokenData['accessToken']
     }, requestData)
-    url = "https://wap.showstart.com/v3/order/wap/order/confirm"
+    url = requestUrl + "/order/wap/order/confirm"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
@@ -249,7 +250,7 @@ def createOrder(orderInfoVo):
         "url": "/nj/order/order",
         "accessToken": tokenData['accessToken']
     }, requestData)
-    url = "https://wap.showstart.com/v3/nj/order/order"
+    url = requestUrl + "/nj/order/order"
     data = json.dumps(requestData, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)
     print(response.json())
@@ -297,7 +298,7 @@ def orderList():
         "accessToken": tokenData['accessToken']
     }, requestData)
 
-    url = "https://wap.showstart.com/v3/nj/coupon/order_list"
+    url = requestUrl + "/nj/coupon/order_list"
     data = requestData
     data = json.dumps(data, separators=(',', ':'))
     response = session.post(url, headers=HEADERS, data=data)

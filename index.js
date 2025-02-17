@@ -94,8 +94,8 @@ const getHeaders = function({
   const E = requestData ? JSON.stringify(requestData) : '' // n.data ? JSON.stringify(n.data) : ""
   const requestUrl = url//'/waf/gettoken' // n.url
   const v = CRTRACEID // uuid(32) + (new Date).getTime()
-  const f = 'wap' // 'wap'
-  const version = '997'
+  const f = 'wap' // 'wap' wechat_mini
+  const version = '997'//'997' 995
   const crpsing = a + t + i + s + f + _ + E + requestUrl + version + f + v
   return {
       'CDEVICEINFO': '', // Cdeviceinfo,
@@ -113,7 +113,10 @@ const getHeaders = function({
       'CDEVICENO': _, // token || uuid(32).toLowerCase()
       'CUUSERREF': _, // token || uuid(32).toLowerCase()
       'CVERSION': version,
-      'St_flpv': st_flpv
+      'St_flpv': st_flpv,
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b) XWEB/9079'
+      // 'User-Agent': 'Mozilla/5.0 (Linux; Android 10; MI 8 SE Build/QKQ1.190828.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/87.0.4280.101 Mobile Safari/537.36LinuxAndroid??5473'
+      
   }
 }
 

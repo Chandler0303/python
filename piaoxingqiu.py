@@ -10,23 +10,39 @@ def js_from_file(file_name):
     return result
 
 
+# src: weixin_mini
+# merchant-id: 6267a80eed218542786f1494
+# User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b) XWEB/9079
+
+# xweb_xhr: 1
+# ver: 4.2.3
+# Accept: */*
+# Sec-Fetch-Site: cross-site
+# Sec-Fetch-Mode: cors
+# Sec-Fetch-Dest: empty
+# Referer: https://servicewechat.com/wxad60dd8123a62329/277/page-frame.html
+# Accept-Encoding: gzip, deflate, br
+# Accept-Language: zh-CN,zh;q=0.9
+
+
 contextJs = execjs.compile(js_from_file('./index.js'))
 session = requests.session()
 comHeaders = {
-    'User-Agent': 'Mozilla/5.0 (Linux; Android 8.0.0; SM-G955U Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36 MicroMessenger/7.0.20.1781(0x6700143B) NetType/WIFI MiniProgramEnv/Windows WindowsWechat/WMPF WindowsWechat(0x6309092b) XWEB/9079',
     'Sec-Ch-Ua-Platform': "Android",
-    'Src':'H5',
-    'Terminal-Src': 'H5',
+    'Src':'weixin_mini',
+    'Terminal-Src': 'WEIXIN_MINI',
+    'merchant-id': '6267a80eed218542786f1494',
     'Access-Token': 'eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJ6aXAiOiJERUYiLCJhbGciOiJSUzUxMiJ9.eNp8kMFOwzAQRP9lzznYseM4ORYVUakIqaIHTmgTr9VIcVw5DgKq_jtOU2hPHHc182Z3TuBxiofNYD3Uw9T3GUwjhWU-QdN9P3hDUMPj0_b9GTIYp2b1t1S5KlEzIpNzXci81MpyWcmkS86d72fRav-23qWNi-1-RpvZKGxutWDKCFU2jDFOUpf2arzJCqENitwqQ3iRMaORNXDOgD6PXaDXzqUMXnLFNeNaFFJcEC9HChj9vxhMaW0gjDcKqyr1Sxm_xkhu-XRpxlFoDzjE-7bSGff5GXxQGDs_QC2WKgd0V8D5BwAA__8.YnCjfYljrAAEZ-sQiWHmav_J5yA2hLTxiGlZLCscSNd2urtlFVftejpTH5MPHmlZxcE4rm7-nuSwFGr6VFSy190FNvahwVRuF8nvrcXSovIHsvXTf9gj_4Havuv1QGDmH7lCOGW25z6_0KBOuT_JTtDa8DJ4HecoLrYHpKndnNo'
 }
-showId = '65d9bc7b862ec60001ddd211' 
+showId = '65f1759d9a16700001833bea' 
 buyNum = 1
 sessionIndex = 0
 skuType = 'SINGLE' #'SINGLE_SKU'
 success = { 
     'count': 0
 }
-src = 'H5'
+src = 'weixin_mini' # 'H5'
 ver = '4.2.1-20240322110808'
 # 定义一个特定的日期时间
 dt = datetime.datetime(2024, 3, 21, 12, 20, 00)  # 2024年3月21日12:20:00
@@ -314,13 +330,13 @@ def createOrder(orderJSON, orderData):
     print(response.json())
     if "data" in response.json() and response.json()['data']['orderId']:
         return response.json()['data']
-    # else:
-    #     createOrder(orderJSON, orderData)
+    else:
+        createOrder(orderJSON, orderData)
 
 # createOrder()
 
 while success['count'] < 1:
-    getCode(3)
+    getCode(0)
     # print(setTimestamp)
     # nowTime = datetime.datetime.now().timestamp()
     # print(nowTime)
