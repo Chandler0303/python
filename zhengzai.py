@@ -17,12 +17,12 @@ session = requests.session()
 comHeaders = {
     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOTgwODkwMzIxMDAyNDk2MDA0MTAwOTg2IiwiY19hdCI6IjIwMjIxMjIzMTQ1NTA1IiwibW9iaWxlIjoiMTc2NzQxOTcwMzUiLCJuaWNrbmFtZSI6IuWuh-iIquWRmENoYW5lIiwidHlwZSI6InVzZXIiLCJleHAiOjE3NDIzNzA2MjIsImlhdCI6MTczOTc3ODYyMn0.bEgJ0qS5MzHhrlNUAbvMgEFI1bXm6K4GON4DpzTJ1Xk'
 }
-performanceId = '4815362903461355523555944' 
+performanceId = '4843471719625154564943081' 
 enterIdList = ['1981249136437002242313008'] # 观演人
 buyNum = 1
 skuType = 'SINGLE_SKU' #'SINGLE_SKU'  SINGLE
 dateIndex = 2
-ticketIndex = 0
+ticketIndex = 1
 success = { 
     'count': 0
 }
