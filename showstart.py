@@ -15,7 +15,7 @@ def js_from_file(file_name):
 contextJs = execjs.compile(js_from_file('./index.js'))
 session = requests.session()
 count = 0
-requestUrl = 'https://wap.showstart.com/v3' # https://wap.showstart.com/v3 (h5) https://api3.showstart.com（miniweix）
+requestUrl = 'https://dev-getoken-api.showstart.com' # https://wap.showstart.com/v3 (h5) https://api3.showstart.com（miniweix）
 st_flpv = contextJs.call('uuid')
 token = contextJs.call('uuid', 32)
 sign = '7a4fe6f2485df7c95111d54a959602aa' # 用户个人签名
