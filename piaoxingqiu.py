@@ -2,7 +2,7 @@ import requests
 import json
 import execjs
 import time
-import datetime
+from datetime import datetime
 import random
 
 def js_from_file(file_name):
@@ -35,9 +35,9 @@ comHeaders = {
     'Src':'weixin_mini',
     'Terminal-Src': 'WEIXIN_MINI',
     'merchant-id': '6267a80eed218542786f1494',
-    'Access-Token': 'eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJ6aXAiOiJERUYiLCJhbGciOiJSUzUxMiJ9.eNp8UcGOgjAQ_Zc5cygFS-GGrEYTjYaVgydS7BBJEEgpm3WN_74tkpXTHt_Me2_ezDygFYO-bpuyhagZ6tqBoUf1wg8oqp-klQgRrDe7fA8O9EOx_CsyygLBCaKkLl_4NOCsdP3QNzyjTNvakpbZeZWayk1fMmstrdArack9wqTHgoIQ4qLPg3ISvmkLj0vh0ZJJFCONSC5IAc-Rd-hQCd3-yxXGUt87E8Q1EVBdrqLR83W_UPVV20BEHeiE0pUeETAjxO-uUniqblYe-JSHLll4LAwduCgUet4iPpta_b3XeJtOlMTb_LzNk90h-8jHU-THLE028ecqP-7i0_qQ7l-T5iOMv8nZYG1Xe7-lEXacxc9fAAAA__8.ONqc5KIeNPAZk27b7x8c10aKZAjwqWRGwZyklvzSjdNvqWQwigE317FR_HXBQ-CulQ0g8_5JQHZ5HWgv8cIEBvH9WNUlnnoaZX86jI-6Ved4VVHB90ORl7GMD5c2jl0dOPRZr1LmoVqQbZ3NaNQYRu5CPfuyEIilag6P2Cl7vxw'
+    'Access-Token': 'eyJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QiLCJ6aXAiOiJERUYiLCJhbGciOiJSUzUxMiJ9.eNp8UUuPgjAQ_i9z5lAKtsWbshpJNBpWDp5IsUMk4ZVSNusa__u2aFZPe_ym32umN-jkaC5JW3Ywb8e69mAcUD_wDYrqJ-4UwhzWm22-Aw-GsVj-DRllXAqCqKgvZiHlgpV-GIWWZ5VpVzvSMjutUjtpzDlz1soJg5KWIiBMBYwXhBAfQ8HLp_BFmwVCyYCWTKGcaEQJSQq4T7x9j1qa7l-utJbm2tsivq2A-nyRrXlf9wv1UHUtzKkHvdSmMhMCZoX43Vcaj1Xj5DzkkRA2xnp7cNYozeuJRjyIKGMz6zJcB4PN80TxIslPSR5v99lHPp0iP2RpvFl8rvLDdnFc79PdI-k9wvrbni3WbrXXt7TSxTl8_wUAAP__.NfN_7HCIoueS4R9FwGtA7lEk6H3fqv-cF_MPiGMm_P2OCZ9EBLzbiN3q9F0KP3ZNI9SVECfvX2bNrkm97pxP4HKUVylm5dsdySBUMTNi8UjPKlLbBLY99NR-u8CFuiZQ0njlE6-anOqcnjUKj08CWXnQQO24w1W2-VDudMUwW8A'
 }
-showId = '67b6dc721564910001a5ef4b'  # 演出ID
+showId = '67e0dd672bf16100013accc2'  # 演出ID
 buyNum = 1
 sessionIndex = 0 # 某一天的session数据下标，默认第一项
 seatPlanIndex =  2 # 座位数据下标，默认第一项
@@ -45,10 +45,7 @@ skuType = 'SINGLE' #'SINGLE_SKU'
 src = 'weixin_mini' # 'H5' weixin_mini
 ver = '4.28.6'
 orderSource = 'COMMON'
-# 定义一个特定的日期时间
-dt = datetime.datetime(2024, 3, 21, 12, 20, 00)  # 2024年3月21日12:20:00
-# 将日期时间转换为时间戳（以秒为单位）
-setTimestamp = int(dt.timestamp())
+
 
 
 # 获取演出日期数据
@@ -189,15 +186,29 @@ def createOrder(items, orderData):
     else:
         # 0.3 20次后当前网络访问次数过多。
         # 0.1 13次后当前网络访问次数过多。
-        random_num = random.uniform(0.1, 0.35)
-        time.sleep(random_num )
+        random_num = random.uniform(0.3, 0.4)
+        time.sleep(0.5)
         createOrder(items, orderData)
 
+# now = datetime.now()
+# target_time = datetime(now.year, now.month, now.day, 15, 15)
+# is_target_time = now.replace(microsecond=0) == target_time.replace(microsecond=0)
+# is_target_time = False
+# while not is_target_time:
+#     now = datetime.now()
+#     target_time = datetime(now.year, now.month, now.day, 15, 18)
+#     is_target_time = now.replace(microsecond=0) == target_time.replace(microsecond=0)
+#     time.sleep(0.5)
+#     print('当前时间：', now)
 
 getBuyerOrder()
 
 
 
+# # 定义一个特定的日期时间
+# dt = datetime.datetime(2024, 3, 21, 12, 20, 00)  # 2024年3月21日12:20:00
+# # 将日期时间转换为时间戳（以秒为单位）
+# setTimestamp = int(dt.timestamp())
 # success = { 
 #     'count': 0
 # }
