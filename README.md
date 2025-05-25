@@ -1,8 +1,8 @@
-# python
-python工具脚本
-piaoxingqiu 支持h5 + miniweixin 购票
-zhengzai 支持h5 + miniweixin + app 购票
-maoyan 支持h5 购票
+# python ticket tools
+piaoxingqiu: h5 + miniweixin
+zhengzai: h5 + miniweixin + app
+maoyan: h5
 
-showstrat 支持h5 + miniweixin 购票 (but 很多票需要去app购买，所以没用了)
-damai 支持h5 购票 (but 很多票需要去app购买，所以没用了)
+many tickets need to be purchased on the app
+showstrat: h5 + miniweixin 
+damai h5
